@@ -1,0 +1,3 @@
+# python_game_developing
+Learn to develop games in python. All content are based on code from the book 
+[**Pythonでつくるゲーム開発**](https://www.amazon.co.jp/Python%E3%81%A7%E3%81%A4%E3%81%8F%E3%82%8B-%E3%82%B2%E3%83%BC%E3%83%A0%E9%96%8B%E7%99%BA-%E5%85%A5%E9%96%80%E8%AC%9B%E5%BA%A7-%E5%AE%9F%E8%B7%B5%E7%B7%A8-%E5%BB%A3%E7%80%AC/dp/4800712564/ref=pd_bxgy_img_sccl_1/356-6086653-7485955?pd_rd_w=mdpv4&content-id=amzn1.sym.918446e7-72f4-48c7-a672-af3b6ace2b19&pf_rd_p=918446e7-72f4-48c7-a672-af3b6ace2b19&pf_rd_r=QWA509EMTGT9QNVJJY6J&pd_rd_wg=15pg7&pd_rd_r=957da195-79ae-41e4-af6f-1e82291cb67f&pd_rd_i=4800712564&psc=1)
