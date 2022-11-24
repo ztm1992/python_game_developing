@@ -10,7 +10,7 @@ def generate_block(n_row, n_col, bound=1):
     return block
 
 
-def rotate_block(block, theta=np.pi / 4):
+def rotate_block(block, theta):
     h, w = block.shape
     S = np.array([[np.sin(theta), np.cos(theta), 0], [-np.cos(theta), np.sin(theta), 0], [0, 0, 1]])
     L = np.array([[1, 0, 0], [0, -1, 0], [-0.5 * w, 0.5 * h, 1]])
@@ -35,8 +35,18 @@ def rotate_block(block, theta=np.pi / 4):
     return sps.vstack(rows).todense()
 
 
-def generate_map(n_row, n_col, mask_size=0.3):
-    mask_row = 2
+def generate_map(n_row, n_col, mask_size=0.5, theta=np.pi / 6):
+    mask_row = int(n_row * mask_size)
+    mask_col = int(n_col * mask_size)
+    mask = generate_block(mask_row, mask_col)
+    mask = rotate_block(block, theta=theta)
+    floor = np.random.randint(0, 3, (n_row, n_col))
+    i = np.random.choice(0, mask_row)
+    j = np.random.choice(0, mask_col)
+    floor[i:i+mask_row, j:j+mask_col] = mask
+    return floor
+
+
 
 
 root = tk.Tk()
@@ -49,3 +59,4 @@ img = []
 for i in range(4):
     img.append(tk.PhotoImage(file=f"images/chip{i}.png"))
 map_data = generate_map(n_row, n_col)
+print(map_data)
