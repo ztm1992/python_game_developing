@@ -5,8 +5,8 @@ from scipy import sparse as sps
 
 
 def generate_block(n_row, n_col, bound=1):
-    block = np.zeros(n_row, n_col)
-    block[1 : n_row - 1, 1 : n_col - 1] = 1
+    block = np.zeros((n_row, n_col))
+    block[bound : n_row - bound, bound : n_col - bound] = 1
     return block
 
 
@@ -32,20 +32,36 @@ def rotate_block(block, theta=np.pi / 4):
             row[:, min(nonzero_cols) : max(nonzero_cols) + 1] = 1
             rows.append(row)
 
-    return sps.vstack(rows).todense()
+    return sps.vstack(rows)
 
 
 def generate_map(n_row, n_col, mask_size=0.3):
-    mask_row = 2
+    mask_row = int(n_row * mask_size)
+    mask_col = int(n_col * mask_size)
+
+    map_data = np.random.randint(0, 3, (n_row, n_col))
+    mask = generate_block(mask_row, mask_col)
+    mask = rotate_block(mask)
+    start_row = np.random.choice(np.arange(0, n_row - mask_row))
+    start_col = np.random.choice(np.arange(0, n_col - mask_col))
+    pos_x = mask.nonzero()[0] + start_row
+    pos_y = mask.nonzero()[1] + start_col
+    map_data[pos_x, pos_y] = 3
+    return map_data
 
 
 root = tk.Tk()
 root.title("Map")
-n_row = 10
+n_row = 14
 n_col = 14
-canvas = tk.Canvas(width=24 * n_col, height=24 * n_row)
+canvas = tk.Canvas(width=48 * n_col, height=48 * n_row)
 canvas.pack()
 img = []
 for i in range(4):
-    img.append(tk.PhotoImage(file=f"images/chip{i}.png"))
-map_data = generate_map(n_row, n_col)
+    img.append(tk.PhotoImage(file=f"./images/chip{i}.png"))
+map_data = generate_map(n_row, n_col, 0.5)
+print(map_data)
+for i in range(n_row):
+    for j in range(n_col):
+        canvas.create_image(j * 48 + 24, i * 48 + 24, image=img[map_data[i, j]])
+root.mainloop()
