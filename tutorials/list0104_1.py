@@ -10,7 +10,7 @@ def generate_block(n_row, n_col, bound=1):
     return block
 
 
-def rotate_block(block, theta=np.pi / 4):
+def rotate_block(block, theta):
     h, w = block.shape
     S = np.array([[np.sin(theta), np.cos(theta), 0], [-np.cos(theta), np.sin(theta), 0], [0, 0, 1]])
     L = np.array([[1, 0, 0], [0, -1, 0], [-0.5 * w, 0.5 * h, 1]])
@@ -35,13 +35,13 @@ def rotate_block(block, theta=np.pi / 4):
     return sps.vstack(rows)
 
 
-def generate_map(n_row, n_col, mask_size=0.3):
+def generate_map(n_row, n_col, mask_size=0.3, theta=np.pi / 6):
     mask_row = int(n_row * mask_size)
     mask_col = int(n_col * mask_size)
 
     map_data = np.random.randint(0, 3, (n_row, n_col))
     mask = generate_block(mask_row, mask_col)
-    mask = rotate_block(mask)
+    mask = rotate_block(mask, theta=theta)
     start_row = np.random.choice(np.arange(0, n_row - mask_row))
     start_col = np.random.choice(np.arange(0, n_col - mask_col))
     pos_x = mask.nonzero()[0] + start_row
