@@ -4,9 +4,11 @@ import numpy as np
 from scipy import sparse as sps
 
 
-def generate_block(n_row, n_col, bound=1):
+def generate_block(n_row, n_col, mask_n_row, mask_n_col):
     block = np.zeros((n_row, n_col))
-    block[bound : n_row - bound, bound : n_col - bound] = 1
+    row_start = np.random.randint(0, n_row - mask_n_row)
+    col_start = np.random.randint(0, n_col - mask_n_col)
+    block[row_start : row_start + mask_n_row, col_start : col_start + mask_n_col] = 1
     return block
 
 
@@ -35,18 +37,16 @@ def rotate_block(block, theta):
     return sps.vstack(rows)
 
 
-def generate_map(n_row, n_col, mask_size=0.3, theta=np.pi / 6):
-    mask_row = int(n_row * mask_size)
-    mask_col = int(n_col * mask_size)
-
+def generate_map(n_row, n_col, mask_size=0.3):
+    mask_n_row = int(n_row * mask_size)
+    mask_n_col = int(n_col * mask_size)
+    block = generate_block(n_row, n_col, mask_n_row, mask_n_col)
+    theta = 2 * np.pi / np.random.randint(1, 10)
+    print(block)
+    block = rotate_block(block, theta=theta)
+    mask_pos = block.nonzero()
     map_data = np.random.randint(0, 3, (n_row, n_col))
-    mask = generate_block(mask_row, mask_col)
-    mask = rotate_block(mask, theta=theta)
-    start_row = np.random.choice(np.arange(0, n_row - mask_row))
-    start_col = np.random.choice(np.arange(0, n_col - mask_col))
-    pos_x = mask.nonzero()[0] + start_row
-    pos_y = mask.nonzero()[1] + start_col
-    map_data[pos_x, pos_y] = 3
+    map_data[mask_pos] = 3
     return map_data
 
 
