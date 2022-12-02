@@ -52,12 +52,21 @@ def generate_map(n_row, n_col, mask_size=0.3):
     return map_data
 
 
+def mouse_click(e, map_data):
+    print(f"position of the momuse: ({e.x}, {e.y})")
+    px, py = int(e.x / 48), int(e.y / 48)
+    if px in range(map_data.shape[1]) and py in range(map_data.shape[0]):
+        data = map_data[py, px]
+        print(f"the map type is {CHIP_NAME[data]}")
+
+
 root = tk.Tk()
 root.title("Map")
 n_row = 14
 n_col = 14
 canvas = tk.Canvas(width=48 * n_col, height=48 * n_row)
 canvas.pack()
+CHIP_NAME = ["grass", "flower", "tree", "water"]
 img = []
 for i in range(4):
     img.append(tk.PhotoImage(file=f"./images/chip{i}.png"))
@@ -65,4 +74,5 @@ map_data = generate_map(n_row, n_col, 0.5)
 for i in range(n_row):
     for j in range(n_col):
         canvas.create_image(j * 48 + 24, i * 48 + 24, image=img[map_data[i, j]])
+canvas.bind("<Button>", lambda e: mouse_click(e, map_data=map_data))
 root.mainloop()
